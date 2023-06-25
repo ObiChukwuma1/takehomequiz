@@ -1,0 +1,22 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t helloworld .'
+      }
+    }
+    stage('Deploy to Test') {
+      steps {
+        sh 'kubectl apply -f deployment.yml -n test'
+        sh 'kubectl apply -f service.yml -n test'
+      }
+    }
+    stage('Deploy to Production') {
+      steps {
+        sh 'kubectl apply -f deployment.yml'
+        sh 'kubectl apply -f service.yml'
+      }
+    }
+  }
+}
